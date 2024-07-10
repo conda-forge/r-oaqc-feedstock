@@ -1,6 +1,5 @@
 {% set version = '1.0' %}
 {% set posix = 'm2-' if win else '' %}
-{% set native = 'm2w64-' if win else '' %}
 
 package:
   name: r-oaqc
@@ -13,9 +12,9 @@ source:
   sha256: 4e56c8bbe6803223fcef79d35efe08aa18b95efc4d495d6e16b93edfd3a180e5
 
 build:
-  skip: True  # [win]
-  merge_build_host: True  # [win]
-  number: 1
+  # Checking windows to see if it passes. Uncomment the line if it fails.
+  # skip: True  # [win]
+  number: 2
   rpaths:
     - lib/R/lib/
     - lib/
@@ -23,7 +22,9 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}              # [not win]
+    - {{ stdlib("c") }}                # [not win]
     - {{ compiler('m2w64_c') }}        # [win]
+    - {{ stdlib("m2w64_c") }}          # [win]
     - {{ compiler('cxx') }}            # [not win]
     - {{ compiler('m2w64_cxx') }}      # [win]
     - {{ posix }}filesystem        # [win]
@@ -36,7 +37,6 @@ requirements:
     - r-base
   run:
     - r-base
-    - {{ native }}gcc-libs         # [win]
 
 test:
   commands:
